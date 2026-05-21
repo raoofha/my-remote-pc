@@ -1,0 +1,38 @@
+<html>
+<head>
+<style>
+* {
+  padding: 0px;
+  margin: 0px;
+}
+input
+{
+  width: 100%;
+}
+</style>
+</head>
+<body>
+<img id="img" src="screenshot.jpg"/>
+<div>
+<input id="txt" placeholder="txt" autocomplete="off"/>
+</div>
+<script>
+$img = document.getElementById("img");
+$txt = document.getElementById("txt");
+$txt.addEventListener("keypress",function(e)
+{ 
+  if(e.key === 'Enter')
+  {
+    if      ($txt.value.startsWith("\\ " )) r = `index.html?cmd=${encodeURIComponent($txt.value.substring(2))}`; 
+    else if ($txt.value.startsWith("\\d ")) r = `index.html?cmd=${encodeURIComponent('rm -rf dl/ ; mkdir -p dl; cd dl ; wget '+JSON.stringify($txt.value.substring(3))+' ; cd .. ; git add dl/ ;')}`; 
+    else if ($txt.value.startsWith("\\n ")) r = `index.html?cmd=${encodeURIComponent('CMD='+JSON.stringify($txt.value.substring(3))+' ; xdotool type "$CMD" ; xdotool key KP_Enter ; sleep 2')}`; 
+    else if ($txt.value.startsWith("\\t ")) r = `index.html?cmd=${encodeURIComponent('CMD='+JSON.stringify($txt.value.substring(3))+' ; xdotool key ctrl+t ; sleep 0.1 ; xdotool type "$CMD" ; xdotool key KP_Enter ; sleep 2')}`; 
+    else                                    r = `index.html?cmd=${encodeURIComponent('CMD='+JSON.stringify($txt.value             )+' ; xdotool type "$CMD" ; sleep 2')}`; 
+    window.location.href = r;
+  }
+});
+$img.addEventListener("click"      ,function(e){                     window.location.href = `index.html?cmd=xdotool mousemove --sync ${e.x} ${e.y} click 1`; });
+$img.addEventListener("contextmenu",function(e){ e.preventDefault(); window.location.href = `index.html?cmd=xdotool mousemove --sync ${e.x} ${e.y} click 3`; return false; });
+</script>
+</body>
+</html>
